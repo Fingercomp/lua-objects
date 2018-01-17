@@ -49,6 +49,7 @@ local getmetatable, setmetatable = getmetatable, setmetatable
 local sformat = string.format
 local tinsert = table.insert
 local tremove = table.remove
+local tunpack = table.unpack
 
 -- table for copies from lua_utils
 local Utils = {}
@@ -194,7 +195,7 @@ local function superCall(self, ...)
   s = findMethod(c.__parents, method, parent_lock)
   if s then
     tinsert(self_dmc_super, s)
-    result = s[method](self, unpack(args))
+    result = s[method](self, tunpack(args))
     tremove(self_dmc_super, #self_dmc_super)
   end
 
@@ -242,7 +243,7 @@ local function initializeObject(obj, params)
 
     rawset(obj, '__parent_lock', parent)
     if parent.__new__ then
-      parent.__new__(obj, unpack(args))
+      parent.__new__(obj, tunpack(args))
     end
 
   end
