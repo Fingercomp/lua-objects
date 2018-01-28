@@ -233,6 +233,15 @@ local function initializeObject(obj, params)
   -- set Class/Instance flag
   obj.__is_class = params.set_isClass
 
+  local parent = params.parent
+  if parent then
+    rawset(obj, '__parent_lock', parent)
+    if parent.__new__ then
+      parent.__new__(obj, unpack(args))
+    end
+    rawset(obj, '__parent_lock', nil)
+  end
+
   return obj
 end
 
@@ -403,7 +412,8 @@ ClassBase = newClass(nil, { name = "Class Class" })
 function ClassBase:__ctor__(...)
   local params = {
     data = {...},
-    set_isClass = false
+    set_isClass = false,
+    parent = self.__class
   }
   --==--
   local o = blessObject({ self.__class }, params)
