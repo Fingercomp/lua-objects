@@ -237,7 +237,7 @@ local function initializeObject(obj, params)
   if parent then
     rawset(obj, '__parent_lock', parent)
     if parent.__new__ then
-      parent.__new__(obj, unpack(args))
+      parent.__new__(obj, table.unpack(args))
     end
     rawset(obj, '__parent_lock', nil)
   end
