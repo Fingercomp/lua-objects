@@ -145,7 +145,7 @@ local function superCall(self, ...)
 
   local self_dmc_super = self.__dmc_super
   local super_flag = (self_dmc_super ~= nil)
-  local result = nil
+  local result
 
   -- finds method name in class hierarchy
   -- returns found class or nil
@@ -195,7 +195,7 @@ local function superCall(self, ...)
   s = findMethod(c.__parents, method, parent_lock)
   if s then
     tinsert(self_dmc_super, s)
-    result = s[method](self, tunpack(args))
+    result = table.pack(s[method](self, tunpack(args)))
     tremove(self_dmc_super, #self_dmc_super)
   end
 
@@ -208,7 +208,7 @@ local function superCall(self, ...)
     self.__dmc_super = nil
   end
 
-  return result
+  return table.unpack(result)
 end
 
 -- initializeObject
